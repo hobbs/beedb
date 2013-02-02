@@ -158,7 +158,7 @@ func (orm *Model) Find(output interface{}) error {
 		return nil
 	} else if len(resultsSlice) == 1 {
 		results := resultsSlice[0]
-		scanMapIntoStruct(output, results)
+		return scanMapIntoStruct(output, results)
 	} else {
 		return errors.New("More Then One Records")
 	}
@@ -191,7 +191,9 @@ func (orm *Model) FindAll(rowsSlicePtr interface{}) error {
 
 	for _, results := range resultsSlice {
 		newValue := reflect.New(sliceElementType)
-		scanMapIntoStruct(newValue.Interface(), results)
+		if err := scanMapIntoStruct(newValue.Interface(), results); err != nil {
+			return err
+		}
 		sliceValue.Set(reflect.Append(sliceValue, reflect.Indirect(reflect.ValueOf(newValue.Interface()))))
 	}
 	return nil
