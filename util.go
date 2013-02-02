@@ -100,7 +100,7 @@ func scanMapIntoStruct(obj interface{}, objMap map[string][]byte) error {
 			}
 			v = x
 		case reflect.Float32, reflect.Float64:
-			x, err := strconv.ParseFloat(string(data), 64)
+			x, err := strconv.ParseFloat(strings.TrimLeft(string(data), "$"), 64)
 			if err != nil {
 				return errors.New("arg " + key + " as float64: " + err.Error())
 			}
